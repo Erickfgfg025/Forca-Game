@@ -2,9 +2,6 @@
 
 Um jogo da forca desenvolvido em Python com interface gráfica usando Tkinter. O jogador deve adivinhar a palavra oculta antes de completar a forca!
 
-## 📷 Tela Inicial
-
-![Tela Inicial](imagens/telainicial-fundo.png)
 
 ## 🎮 Funcionalidades
 
