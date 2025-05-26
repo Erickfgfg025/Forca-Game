@@ -25,14 +25,15 @@ class Jogo:
         
         #construo todos os botões e textos 
         self.imagem = Label(self.tela,image = self.fundo)
-        
+        self.titulo = Label(self.tela, text="Jogo da Forca", fg="black",font=('Tahoma',14,'bold'))
         
         self.btn_iniciar = Button(self.tela,text="INICIAR JOGO",fg='grey')
         
         
         #desenho todos botões e textos
         self.imagem.place(x=0,y=0,relwidth=1,relheight=1)
-        self.btn_iniciar.pack(pady=(400,10))
+        self.titulo.pack(pady=(80,10))
+        self.btn_iniciar.pack(pady=(350,10))
 
         self.tela.mainloop()
         
