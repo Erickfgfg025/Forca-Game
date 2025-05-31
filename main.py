@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+import pygame
 
 
 class Jogo:
@@ -12,6 +13,9 @@ class Jogo:
         self.tela['bg']="white"
         self.tela.resizable(False,False)
 
+        #inicila som
+        pygame.mixer.init()
+        self.acerto = pygame.mixer.Sound("som/acerto.mp3")
 
         self.frame1 = Frame(self.tela)
         #self.frame2 = Frame(self.tela)
@@ -52,13 +56,14 @@ class Jogo:
         self.tela.mainloop() # faz o código rodar
         
     def iniciarjogo(self):
+        self.tela.bind("<Return>", lambda event: self.tentar())
         self.frame1.pack_forget()
         
         self.imagem2 = Label(self.tela,image=self.fundo_tk)
         self.lbl_palavra = Label(self.tela,text=" ".join(self.descoberta),font=("Arial",30,"bold"),bg="white",bd=1)
         self.chute = Entry(self.tela,width=10,bd=5)
         self.lbl_tentativas = Label(self.tela, text= f"Tentativas: {self.chances}",font=("Arial",12))
-
+        self.resultado = Label(self.tela, text = " ", fg= "black",bg="white", font=("Verdana", 12))
         self.btn_chutar = Button(self.tela, text="Chutar",command=self.tentar,font=("Verdana",12,"bold"),relief="flat",bg="grey",fg="white")
       
       
@@ -67,6 +72,7 @@ class Jogo:
         self.imagem2.place(x=0,y=0,relwidth=1,relheight=1)
         self.lbl_palavra.place(x=420-100,y=300)
         self.chute.place(x=410,y=470)
+        self.resultado.place(x=320,y=200)
         self.lbl_tentativas.place(x=10, y=370)
         self.btn_chutar.place(x=480,y=470)
 
@@ -79,11 +85,20 @@ class Jogo:
             for i,l in enumerate(self.palavra):
                 if l==self.letra:
                     self.descoberta[i]= self.letra
-
+            self.acerto.play()
         else:
             self.chances -= 1
 
+
         self.update()
+
+        if "_" not in self.descoberta:
+            self.resultado["text"] = "Você venceu! "
+            self.btn_chutar["state"] = "disabled"
+        
+        elif self.chances == 0:
+            self.resultado["text"] = f"Voce perdeu! Palavra: {self.palavra}"
+            self.btn_chutar["state"] = "disabled"
 
     def update(self):
         self.lbl_palavra["text"]=" ".join(self.descoberta)
