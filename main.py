@@ -1,25 +1,29 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import pygame
+from gerador_palavra import palavra_sortear
 
 
 class Jogo:
     def __init__(self):
         
         self.tela = Tk()
-       
+        self.cor_fundo = "#DABCA1"
         self.tela.geometry("800x600")
         self.tela.title("Jogo da Forca")
-        self.tela['bg']="white"
+        self.tela['bg']=self.cor_fundo
         self.tela.resizable(False,False)
-
+        
+        
         #inicila som
+        pygame.init()
         pygame.mixer.init()
         self.acerto = pygame.mixer.Sound("som/acerto.mp3")
         self.trilha = pygame.mixer.Sound("som/trilha-sonora.mp3")
         self.trilha.play(-1)
         self.trilha.set_volume(0.2)
         self.acerto.set_volume(0.2)
+
 
         self.frame1 = Frame(self.tela)
         #self.frame2 = Frame(self.tela)
@@ -35,7 +39,7 @@ class Jogo:
         self.fundo_tk = ImageTk.PhotoImage(self.fundo)
         
 
-        self.palavra = "PYTHON"
+        self.palavra = palavra_sortear().upper()
         self.descoberta = ["_"] * len(self.palavra)
         self.palavras_errada = []
         self.chances = 6
@@ -63,22 +67,24 @@ class Jogo:
         self.tela.bind("<Return>", lambda event: self.tentar())
         self.frame1.pack_forget()
         
-        self.imagem2 = Label(self.tela,image=self.fundo_tk)
-        self.lbl_palavra = Label(self.tela,text=" ".join(self.descoberta),font=("Arial",30,"bold"),bg="white",bd=1)
+        #self.imagem2 = Label(self.tela,image=self.fundo_tk)
+        self.lbl_palavra = Label(self.tela,text=" ".join(self.descoberta),font=("Arial",30,"bold"),bg=self.cor_fundo,bd=1)
         self.chute = Entry(self.tela,width=10,bd=5)
-        self.lbl_tentativas = Label(self.tela, text= f"Tentativas: {self.chances}",font=("Arial",12))
-        self.resultado = Label(self.tela, text = " ", fg= "green",bg="white", font=("Verdana", 12))
-        self.btn_chutar = Button(self.tela, text="Chutar",command=self.tentar,font=("Verdana",12,"bold"),relief="flat",bg="grey",fg="white")
+        self.lbl_tentativas = Label(self.tela, text= f"Tentativas: {self.chances}",font=("Arial",12),bg=self.cor_fundo)
+
+        self.resultado = Label(self.tela, text = " ", fg= "green", font=("Verdana", 12),bg=self.cor_fundo)
+
+        self.btn_chutar = Button(self.tela, text="Chutar",command=self.tentar,font=("Verdana",12,"bold"),relief="flat",bg="grey",fg="white",width=10)
       
       
       
       #manda desenha na tela 
-        self.imagem2.place(x=0,y=0,relwidth=1,relheight=1)
+        #self.imagem2.place(x=0,y=0,relwidth=1,relheight=1)
         self.lbl_palavra.place(x=420-100,y=300)
-        self.chute.place(x=410,y=470)
+        self.chute.place(x=380,y=470)
         self.resultado.place(x=320,y=200)
         self.lbl_tentativas.place(x=10, y=370)
-        self.btn_chutar.place(x=480,y=470)
+        self.btn_chutar.place(x=380,y=500)
 
 
     def tentar(self):
@@ -109,4 +115,8 @@ class Jogo:
         self.lbl_tentativas["text"] = f"Tentativas restantes: {self.chances}"
         
         
+
 app = Jogo()
+
+app = Jogo()
+

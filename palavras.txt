@@ -1,0 +1,12 @@
+banana
+laranja
+melancia
+cachorro
+celular
+python
+dente
+teclado
+carro
+moto
+mulher
+homem
