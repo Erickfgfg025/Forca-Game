@@ -1,3 +1,4 @@
+    
 from tkinter import *
 from PIL import Image, ImageTk
 import pygame
@@ -20,9 +21,11 @@ class Jogo:
         pygame.mixer.init()
         self.acerto = pygame.mixer.Sound("som/acerto.mp3")
         self.trilha = pygame.mixer.Sound("som/trilha-sonora.mp3")
+        self.errado = pygame.mixer.Sound("som/erro.mp3")
         self.trilha.play(-1)
         self.trilha.set_volume(0.2)
         self.acerto.set_volume(0.2)
+        self.errado.set_volume(0.2)
 
 
         self.frame1 = Frame(self.tela)
@@ -70,8 +73,8 @@ class Jogo:
         #self.imagem2 = Label(self.tela,image=self.fundo_tk)
         self.lbl_palavra = Label(self.tela,text=" ".join(self.descoberta),font=("Arial",30,"bold"),bg=self.cor_fundo,bd=1)
         self.chute = Entry(self.tela,width=10,bd=5)
-        self.lbl_tentativas = Label(self.tela, text= f"Tentativas: {self.chances}",font=("Arial",12),bg=self.cor_fundo)
-
+        self.lbl_tentativas = Label(self.tela, text= f"Tentativas: {self.chances}",font=("Verdana",12),bg=self.cor_fundo)
+        self.lbl_erradas = Label(self.tela,text="Letras erradas: 0",font=("Verdana",12),bg=self.cor_fundo,fg="red")
         self.resultado = Label(self.tela, text = " ", fg= "green", font=("Verdana", 12),bg=self.cor_fundo)
 
         self.btn_chutar = Button(self.tela, text="Chutar",command=self.tentar,font=("Verdana",12,"bold"),relief="flat",bg="grey",fg="white",width=10)
@@ -84,6 +87,7 @@ class Jogo:
         self.chute.place(x=380,y=470)
         self.resultado.place(x=320,y=200)
         self.lbl_tentativas.place(x=10, y=370)
+        self.lbl_erradas.place(x=10,y=400)
         self.btn_chutar.place(x=380,y=500)
 
 
@@ -97,10 +101,13 @@ class Jogo:
                     self.descoberta[i]= self.letra
             self.acerto.play()
         else:
+            self.errado.play()
             self.chances -= 1
+            self.palavras_errada.append(self.letra)
 
 
         self.update()
+
 
         if "_" not in self.descoberta:
             self.resultado["text"] = "Você venceu! "
@@ -108,15 +115,14 @@ class Jogo:
         
         elif self.chances == 0:
             self.resultado["text"] = f"Voce perdeu! Palavra: {self.palavra}"
+            self.resultado["fg"] = 'red'
             self.btn_chutar["state"] = "disabled"
 
     def update(self):
         self.lbl_palavra["text"]=" ".join(self.descoberta)
         self.lbl_tentativas["text"] = f"Tentativas restantes: {self.chances}"
+        self.lbl_erradas["text"] = f"Palavras erradas: {self.palavras_errada}".strip()
         
-        
+
 
 app = Jogo()
-
-app = Jogo()
-
